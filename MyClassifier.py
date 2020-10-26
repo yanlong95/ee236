@@ -106,6 +106,9 @@ class MyClassifier:
 
     def train(self, p, train_data, train_label):
         # pre-processing data (permutation, normalize)
+        erase = np.random.choice([0, 1], train_data.shape, p=[p, 1 - p])
+        train_data = train_data * erase
+
         N_train = train_data.shape[0]
         train_labels = one_hot_labels(train_label)
         p = np.random.permutation(N_train)
@@ -196,10 +199,13 @@ if __name__ == '__main__':
     n_test = X_test.shape[0]
     M = X_test.shape[1]
 
+    p = 0.6
     mn_classifier = MyClassifier(args.num_classes, M)
-    mn_classifier.train(1.0, X_train, y_train)
+    mn_classifier.train(p, X_train, y_train)
 
     y = mn_classifier.classify(X_test)
-    yp = mn_classifier.TestCorrupted(1.0, X_test)
+    yp = mn_classifier.TestCorrupted(p, X_test)
     accuracy_y = (y == y_test).sum() * 1. / n_test
+    accuracy_yp = (yp == y_test).sum() * 1. / n_test
     print(accuracy_y)
+    print(accuracy_yp)
