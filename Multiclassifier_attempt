@@ -11,6 +11,8 @@ X_test = X_test_raw.reshape(X_test_raw.shape[0], -1)
 
 def train(K,train_data,train_label):  
     # Iterate binary train data for all combinations
+    W = np.zeros((K,K,784))
+    w = np.zeros((K,K))
     for i in range(K):
         for j in range(K):
             if j > i:
@@ -27,14 +29,17 @@ def train(K,train_data,train_label):
                 x_train = np.concatenate((train_datai, train_dataj), axis=0)[permutation, :]
                 y_train = np.concatenate((train_labeli, train_labelj))[permutation]
                 print(i,j)
-                W = cp.Variable((784,))
-                w = cp.Variable()
-                loss = cp.sum(cp.pos(1 - cp.multiply(y_train, x_train @ W - w)))
+                Wij = cp.Variable((784,))
+                wij = cp.Variable()
+                loss = cp.sum(cp.pos(1 - cp.multiply(y_train, x_train @ Wij - wij)))
                 prob = cp.Problem(cp.Minimize(loss))
                 prob.solve()
+                W[i,j,:] = Wij.value
+                w[i,j] = wij.value
     return W,w
 
 def test(K,W,w,X_test,y_test):
+    P = np.zeros((K,K))
     for i in range(K):
         for j in range(K):
             if j > i:
@@ -51,18 +56,22 @@ def test(K,W,w,X_test,y_test):
                 test_data = np.concatenate((X_testi, X_testj), axis=0)[permutation, :]
                 test_label = np.concatenate((y_testi, y_testj))[permutation]
                 M = test_label.shape[0]
-                f = test_label * (test_data @ W.value - w.value)
-                Pi = np.zeros(M)
+                f = test_label * (test_data @ W[i,j,:] - w[i,j])
+                Pij = np.zeros(M)
                 for m in range(M):
                     if f[m] <= 0:
-                        Pi[m] = 0
+                        Pij[m] = 0
                     else:
-                        Pi[m] = 1
-                P = sum(Pi)/M
+                        Pij[m] = 1
+                P[i,j] = np.sum(Pij)/M
     return P                
 
+# Change this K value to change the number of classifiers
 if __name__ == '__main__':
-    W,w = train(2,train_data,train_label)
-    P = test(2,W,w,X_test,y_test)
-    print(w.value)
-    print(P)
+    K = 2
+    W,w = train(K,train_data,train_label)
+    P = test(K,W,w,X_test,y_test)
+    for i in range (K):
+        for j in range(K):
+            if j>i:
+                print("For the",i,"-",j,"classifier: P=", P[i,j])
