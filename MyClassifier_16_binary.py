@@ -43,22 +43,22 @@ class MyClassifier:
         erase = np.random.choice([0, 1], test_data.shape, p=[p, 1 - p])
         return self.classify(erase * test_data)
 
+# uncomment the lines to train and test for the classification of 1 & 7.
+# mnist_train = pd.read_csv("D:\Python Project\Linear Programming Project 1\mnist_train.csv")
+# mnist_test = pd.read_csv("D:\Python Project\Linear Programming Project 1\mnist_test.csv")
+# mnist_train_selected = mnist_train[mnist_train["label"].isin([1, 7])]
+# mnist_test_selected = mnist_test[mnist_test["label"].isin([1, 7])]
+# y_train = np.array(mnist_train_selected['label'], dtype=float)
+# y_train = np.where(y_train==7,-1,y_train)
+# x_train = np.array(mnist_train_selected, dtype=float)
+# x_train = np.delete(x_train,0,1)
+# y_test = np.array(mnist_test_selected['label'],dtype=float)
+# y_test = np.where(y_test==7,-1,y_test)
+# x_test = np.array(mnist_test_selected, dtype=float)
+# x_test = np.delete(x_test,0,1)
 
-mnist_train = pd.read_csv("D:\Python Project\Linear Programming Project 1\mnist_train.csv")
-mnist_test = pd.read_csv("D:\Python Project\Linear Programming Project 1\mnist_test.csv")
-mnist_train_selected = mnist_train[mnist_train["label"].isin([1, 7])]
-mnist_test_selected = mnist_test[mnist_test["label"].isin([1, 7])]
-y_train = np.array(mnist_train_selected['label'], dtype=float)
-y_train = np.where(y_train==7,-1,y_train)
-x_train = np.array(mnist_train_selected, dtype=float)
-x_train = np.delete(x_train,0,1)
-y_test = np.array(mnist_test_selected['label'],dtype=float)
-y_test = np.where(y_test==7,-1,y_test)
-x_test = np.array(mnist_test_selected, dtype=float)
-x_test = np.delete(x_test,0,1)
-
-p = 0.6
-hyperplane = MyClassifier(2, 784)
-hyperplane.train(p, x_train, y_train)
-accuracy = np.sum(hyperplane.TestCorrupted(p, x_test).flatten() == y_test) / y_test.shape
-print('Accuracy: ', accuracy)
+# p = 0.6
+# hyperplane = MyClassifier(2, 784)
+# hyperplane.train(p, x_train, y_train)
+# accuracy = np.sum(hyperplane.TestCorrupted(p, x_test).flatten() == y_test) / y_test.shape
+# print('Accuracy: ', accuracy)
