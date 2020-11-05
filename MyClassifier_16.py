@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import cvxpy as cp
 
-from keras.datasets import mnist
+# from keras.datasets import mnist  # uncomment this line to import the data for testing
 
 
 def select_data(data, label, idx1=1, idx2=7):
@@ -74,18 +74,16 @@ class MyClassifier:
         return self.classify(erase * test_data)
 
 
-if __name__ == '__main__':
-    # mnist_train = pd.read_csv("~\Desktop\proj1\data\mnist_train.csv")
-    # mnist_test = pd.read_csv("~\Desktop\proj1\data\mnist_test.csv")
+# uncomment the lines to do training and testing with MNIST for multiclasses.
+# if __name__ == '__main__':
+#     # load data as numpy array, data = (n, 784), label = (n,)
+#     (X_train_raw, y_train), (X_test_raw, y_test) = mnist.load_data()
+#     X_train = X_train_raw.reshape(X_train_raw.shape[0], -1)
+#     X_test = X_test_raw.reshape(X_test_raw.shape[0], -1)
 
-    # load data as numpy array, data = (n, 784), label = (n,)
-    (X_train_raw, y_train), (X_test_raw, y_test) = mnist.load_data()
-    X_train = X_train_raw.reshape(X_train_raw.shape[0], -1)
-    X_test = X_test_raw.reshape(X_test_raw.shape[0], -1)
-
-    # train and test
-    p = 0.6
-    hyperplane = MyClassifier(10, 784)
-    hyperplane.train(p, X_train, y_train)
-    accuracy = np.sum(hyperplane.TestCorrupted(p, X_test) == y_test) / X_test.shape[0]
-    print('Accuracy: ', accuracy)
+#     # train and test
+#     p = 0.6
+#     hyperplane = MyClassifier(10, 784)
+#     hyperplane.train(p, X_train, y_train)
+#     accuracy = np.sum(hyperplane.TestCorrupted(p, X_test) == y_test) / X_test.shape[0]
+#     print('Accuracy: ', accuracy)
